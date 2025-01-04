@@ -20,6 +20,48 @@ public class FlattenBinaryTreeToLinkedList {
     }
 
     /**
+     * Observe the output.
+     * <p>
+     * PreOrder == Root L R
+     * <p>
+     * i.e., flatten the left subtree
+     * and then flatten the right subtree
+     * <p>
+     * such that connect the root.right=root.left(flattened)
+     * and set root.left=null;
+     * <p>
+     * also, hold the root.right in a temp variable
+     * such that we will connect the flattened left sub tree's last node to this temp right.
+     * <p>
+     * and then flatten the temp right tree.
+     * <p>
+     * TC: O(n)
+     * SC: O(h)
+     *
+     * @param root
+     */
+    public void flatten_brute(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        // flatten the left subtree
+        flatten_brute(root.left);
+        TreeNode right = root.right;
+        // if root.left == null --> left sub tree is already flattened
+        if (root.left != null) {
+            root.right = root.left;
+            root.left = null;
+            TreeNode curr = root;
+            while (curr.right != null) {
+                curr = curr.right;
+            }
+            curr.right = right;
+        }
+        // flatten the right sub tree
+        flatten_brute(right);
+    }
+
+    /**
      * Morris PreOrder Traversal == Threaded Model of Binary Trees
      * TC: O(n)
      * SC: O(1)
@@ -33,7 +75,7 @@ public class FlattenBinaryTreeToLinkedList {
      *
      * @param root
      */
-    public void flatten(TreeNode root) {
+    public void flatten_morris(TreeNode root) {
         TreeNode curr = root;
         while (curr != null) {
             TreeNode left = curr.left;
