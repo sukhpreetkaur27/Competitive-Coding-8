@@ -1,3 +1,6 @@
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 // LC 114
 public class FlattenBinaryTreeToLinkedList {
     public class TreeNode {
@@ -59,6 +62,34 @@ public class FlattenBinaryTreeToLinkedList {
         }
         // flatten the right sub tree
         flatten_brute(right);
+    }
+
+    /**
+     * TC: O(n)
+     * SC: O(h)
+     *
+     * @param root
+     */
+    public void flatten_iterative(TreeNode root) {
+        // edge case
+        if (root == null) {
+            return;
+        }
+        Deque<TreeNode> stack = new ArrayDeque<>();
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            TreeNode curr = stack.pop();
+            // push right first
+            if (curr.right != null) {
+                stack.push(curr.right);
+            }
+            // then push left, such that top can be easily connected to curr.right
+            if (curr.left != null) {
+                stack.push(curr.left);
+            }
+            curr.right = stack.peek();
+            curr.left = null;
+        }
     }
 
     /**
